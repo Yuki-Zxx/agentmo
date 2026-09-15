@@ -567,7 +567,17 @@ int main(int argc, char **argv)
 	 * Running the same workload both ways is the experiment that quantifies
 	 * "which layer do you have to hook to get a usable path". */
 #ifdef AM_HAVE_DPATH_PROG
+	/* ALL raw-syscall open capture points go off together, or the same open
+	 * is recorded twice (once relative from the syscall arg, once absolute
+	 * from d_path) and the abs/rel ratio — the whole point of the
+	 * measurement — is wrong. */
 	bpf_program__set_autoload(skel->progs.on_openat,    !use_dpath);
+	bpf_program__set_autoload(skel->progs.on_openat2,   !use_dpath);
+#ifndef AM_NO_LEGACY_SYSCALLS
+	/* present unless the .bpf.c was built with -DAM_LEGACY_SYSCALLS=0 */
+	bpf_program__set_autoload(skel->progs.on_open,      !use_dpath);
+	bpf_program__set_autoload(skel->progs.on_creat,     !use_dpath);
+#endif
 	bpf_program__set_autoload(skel->progs.on_file_open,  use_dpath);
 #else
 	if (use_dpath)

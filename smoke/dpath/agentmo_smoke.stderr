@@ -1,0 +1,19 @@
+[policy] loaded from /home.local/mdxuser/agentmo/smoke/dpath/empty.conf: read=0 write=0 exec=0 net=0
+>> Agentmo running: scope=pid 41170 subtree | print-ALL | JSONL | open-src=security_file_open+d_path (Ctrl-C to stop)
+
+==== EXECUTION ATTESTATION ====
+duration(first..last event) = 2.603 s
+events = 388   safe=18 watch=0 alert=370   rate=149.1 ev/s
+by type:  EXEC=17  FORK=18  OPEN=319  DEL=4  REN=2  PERM=4  PRIV=18  NET=3  KILL=1  MKDIR=2
+
+---- FIELD SUFFICIENCY SELF-REPORT ----
+path-bearing events = 348
+  absolute  = 337      (96.84%)   <- resolvable to a file
+  relative  = 11       ( 3.16%)   <- basename only, NOT resolvable
+  missing   = 0        ( 0.00%)
+  of which resolved by bpf_d_path = 319
+exec events = 17   with argv = 17   without argv = 0   truncated = 0
+>> NOTE: 11 event(s) carry no resolvable path and 0 exec(s) carry no argv.
+>>       Those actions were DETECTED but cannot be RECONSTRUCTED.
+
+>> VERDICT: UNSAFE — 370 out-of-envelope action(s) detected
